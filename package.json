@@ -10,21 +10,27 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:zentao.getURL",
-		"onCommand:zentao.setURL"
+		"onCommand:zentao.login",
+		"onCommand:zentao.pickTasksForCommit",
+		"onCommand:zentao.viewTasks"
 	],
 	"main": "./src/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "zentao.getURL",
-				"title": "Get URL",
-				"category": "Zentao"
+				"command": "zentao.login",
+				"title": "登录",
+				"category": "禅道"
 			},
 			{
-				"command": "zentao.setURL",
-				"title": "Set URL",
-				"category": "Zentao"
+				"command": "zentao.pickTasksForCommit",
+				"title": "选择任务形成 Commit Message",
+				"category": "禅道"
+			},
+			{
+				"command": "zentao.viewTasks",
+				"title": "查看任务",
+				"category": "禅道"
 			}
 		]
 	},
@@ -43,5 +49,8 @@
 		"mocha": "^9.1.3",
 		"typescript": "^4.4.4",
 		"@vscode/test-electron": "^1.6.2"
+	},
+	"dependencies": {
+		"axios": "^0.24.0"
 	}
 }
