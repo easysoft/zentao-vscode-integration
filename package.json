@@ -12,7 +12,9 @@
 	"activationEvents": [
 		"onCommand:zentao.login",
 		"onCommand:zentao.pickTasksForCommit",
-		"onCommand:zentao.viewTasks"
+		"onCommand:zentao.viewTasks",
+		"onCommand:zentao.writeCommitMessage",
+		"onLanguage:git-commit"
 	],
 	"main": "./src/extension.js",
 	"contributes": {
@@ -30,6 +32,11 @@
 			{
 				"command": "zentao.viewTasks",
 				"title": "查看任务",
+				"category": "禅道"
+			},
+			{
+				"command": "zentao.writeCommitMessage",
+				"title": "撰写 Commit Message (自动补全)",
 				"category": "禅道"
 			}
 		]

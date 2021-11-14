@@ -14,6 +14,7 @@ const executeCommandInTerminal = command => {
  * @param {vscode.ExtensionContext} context
  */
 const activate = (context) => {
+	// 登录禅道
 	context.subscriptions.push(vscode.commands.registerCommand('zentao.login', async () => {
 		let account, password;
 		const url = await vscode.window.showInputBox({
@@ -56,6 +57,7 @@ const activate = (context) => {
 		});
 	}));
 
+	// 选择任务以撰写 Commit Message
 	context.subscriptions.push(vscode.commands.registerCommand('zentao.pickTasksForCommit', () => {
 		if (!token) {
 			return vscode.window.showErrorMessage('请先登录禅道');
@@ -78,6 +80,7 @@ const activate = (context) => {
 		});
 	}));
 
+	// 选择并在浏览器中打开任务
 	context.subscriptions.push(vscode.commands.registerCommand('zentao.viewTasks', () => {
 		if (!token) {
 			return vscode.window.showErrorMessage('请先登录禅道');
@@ -91,6 +94,39 @@ const activate = (context) => {
 			});
 		});
 	}));
+
+	// 打开用于撰写 Commit Message 的文件
+	context.subscriptions.push(vscode.commands.registerCommand('zentao.writeCommitMessage', () => {
+		const gitExtension = vscode.extensions.getExtension('vscode.git').exports;
+    	const git = gitExtension.getAPI(1)
+		const repos = git.repositories;
+		if (!repos) {
+			return vscode.window.showWarningMessage('没有找到当前的 git 代码库');
+		}
+		const repoRootPath = repos[0].rootUri.path;
+		const path = repoRootPath.slice(1) + '/.git/COMMIT_EDITMSG';
+		const uri = vscode.Uri.file(path);
+		return vscode.commands.executeCommand('vscode.open', uri, {preview: false});
+	}));
+
+	// Git Commit Message 任务 ID 自动补全
+	vscode.languages.registerCompletionItemProvider('git-commit', {
+		provideCompletionItems: async (document, position) => {
+			if (!token) {
+				return undefined;
+			}
+			const linePrefix = document.lineAt(position).text.substr(0, position.character);
+			if (!linePrefix.endsWith('task #')) {
+				return undefined;
+			}
+			const res = await axios.get(`${baseURL}my-work-task.json`, {
+				headers: {'Content-Type': 'application/json', 'Token': token}
+			});
+			const resData = JSON.parse(res.data.data);
+			const completionItems = resData.tasks.map(task => `    任务 #${task.id}: ${task.name}`);
+			return completionItems.map(item => new vscode.CompletionItem({label: / #(\d+): /.exec(item)[1], detail: item}, vscode.CompletionItemKind.Value));
+		},
+	}, '#')
 }
 
 module.exports = {
