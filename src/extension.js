@@ -126,7 +126,7 @@ const activate = (context) => {
 			const completionItems = resData.tasks.map(task => `    任务 #${task.id}: ${task.name}`);
 			return completionItems.map(item => new vscode.CompletionItem({label: / #(\d+): /.exec(item)[1], detail: item}, vscode.CompletionItemKind.Value));
 		},
-	}, '#')
+	}, '#');
 }
 
 module.exports = {
