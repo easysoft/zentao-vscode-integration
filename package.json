@@ -2,7 +2,7 @@
 	"name": "zentao",
 	"displayName": "zentao",
 	"description": "Zentao integration demo.",
-	"version": "0.0.1",
+	"version": "0.1.0",
 	"engines": {
 		"vscode": "^1.62.0"
 	},
@@ -10,14 +10,21 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:zentao.helloWorld"
+		"onCommand:zentao.getURL",
+		"onCommand:zentao.setURL"
 	],
-	"main": "./extension.js",
+	"main": "./src/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "zentao.helloWorld",
-				"title": "Hello World"
+				"command": "zentao.getURL",
+				"title": "Get URL",
+				"category": "Zentao"
+			},
+			{
+				"command": "zentao.setURL",
+				"title": "Set URL",
+				"category": "Zentao"
 			}
 		]
 	},
