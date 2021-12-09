@@ -2,13 +2,11 @@ const vscode = require('vscode');
 const {zentaoAPI} = require('./zentao-api');
 const {executeCommandInTerminal, getGitRepos} = require('./util');
 
-let api;
-
 /**
  * @param {vscode.ExtensionContext} context
  */
 const activate = (context) => {
-	api = new zentaoAPI(context);
+	const api = new zentaoAPI(context);
 
 	// 登录禅道
 	context.subscriptions.push(vscode.commands.registerCommand('zentao.login', async () => {
