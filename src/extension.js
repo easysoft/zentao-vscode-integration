@@ -47,7 +47,7 @@ const activate = (context) => {
 			vscode.window.showInformationMessage(`登录成功，当前用户 ${profile.realname}`);
 		}).catch(e => {
 			console.log(e);
-			vscode.window.showWarningMessage(`登录失败`);
+			vscode.window.showWarningMessage(`登录失败，请检查服务器地址、用户名、密码是否填写正确。`);
 		});
 	}));
 
