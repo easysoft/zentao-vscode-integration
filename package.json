@@ -1,13 +1,17 @@
 {
 	"name": "zentao",
 	"displayName": "zentao",
-	"description": "Zentao integration demo.",
+	"description": "Zentao integration.",
+	"publisher": "EasyCorp",
 	"version": "0.1.0",
 	"engines": {
 		"vscode": "^1.62.0"
 	},
 	"categories": [
 		"Other"
+	],
+	"keywords": [
+		"zentao"
 	],
 	"activationEvents": [
 		"onCommand:zentao.login",
@@ -43,7 +47,7 @@
 	},
 	"scripts": {
 		"lint": "eslint .",
-		"pretest": "npm run lint",
+		"pretest": "npm run lint"
 	},
 	"devDependencies": {
 		"@types/vscode": "^1.62.0",
