@@ -22,17 +22,29 @@ class zentaoAPI {
          */
         this._baseURL = '';
 
-        // 初始化时获取上次保存的凭据
-        context.secrets.get('token').then(token => {
-            if (token) {
-                this._token = token;
+        /**
+         * 禅道用户对象
+         * @type {object}
+         */
+        this._user = null;
+
+        // 初始化时获取上次保存的凭据，并设置用户
+        Promise.all([
+            context.secrets.get('token').then(token => {
+                if (token) {
+                    this._token = token;
+                }
+            }),
+            context.secrets.get('url').then(url => {
+                if (url) {
+                    this._baseURL = url;
+                }
+            }),
+        ]).then(() => this.getCurrentUser().then(profile => {
+            if (profile) {
+                this._user = profile;
             }
-        });
-        context.secrets.get('url').then(url => {
-            if (url) {
-                this._baseURL = url;
-            }
-        });
+        }));
     }
 
     /**
@@ -119,7 +131,8 @@ class zentaoAPI {
             this._baseURL = credentials.url;
             await this.setCredentials({token});
         }
-        return await this.getCurrentUser(credentials);
+        this._user = await this.getCurrentUser(credentials);
+        return this._user;
     }
 
     /**
