@@ -21,6 +21,18 @@ class zentaoAPI {
          * @type {string}
          */
         this._baseURL = '';
+
+        // 初始化时获取上次保存的凭据
+        context.secrets.get('token').then(token => {
+            if (token) {
+                this._token = token;
+            }
+        });
+        context.secrets.get('url').then(url => {
+            if (url) {
+                this._baseURL = url;
+            }
+        });
     }
 
     /**
