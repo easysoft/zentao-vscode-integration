@@ -1,14 +1,8 @@
 const vscode = require('vscode');
 const {zentaoAPI} = require('./zentao-api');
+const {executeCommandInTerminal, getGitRepos} = require('./util');
 
 let api;
-
-const isTerminalExist = () => vscode.window.terminals.length !== 0;
-const executeCommandInTerminal = command => {
-    const terminal = isTerminalExist() ? vscode.window.activeTerminal : vscode.window.createTerminal();
-	terminal.show();
-	terminal.sendText(command, false); // change to true for instant execution.
-}
 
 /**
  * @param {vscode.ExtensionContext} context
@@ -99,9 +93,7 @@ const activate = (context) => {
 
 	// 打开用于撰写 Commit Message 的文件
 	context.subscriptions.push(vscode.commands.registerCommand('zentao.writeCommitMessage', () => {
-		const gitExtension = vscode.extensions.getExtension('vscode.git').exports;
-    	const git = gitExtension.getAPI(1)
-		const repos = git.repositories;
+		const repos = getGitRepos();
 		if (!repos) {
 			return vscode.window.showWarningMessage('没有找到当前的 git 代码库');
 		}
