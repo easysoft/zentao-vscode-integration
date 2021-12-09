@@ -51,6 +51,22 @@ const activate = (context) => {
 		});
 	}));
 
+	// 选择当前工作区对应的产品
+	context.subscriptions.push(vscode.commands.registerCommand('zentao.selectProduct', async () => {
+		const products = await api.getProducts();
+		const pick = await vscode.window.showQuickPick(products.map(product => ({
+			id: product.id,
+			name: product.name,
+			label: product.name,
+			detail: product.desc,
+		})));
+		if (pick) {
+			delete pick.label;
+			context.workspaceState.update('zentaoProduct', pick);
+			vscode.window.showInformationMessage(`设置成功，当前产品为 "${pick.name}"`);
+		}
+	}));
+
 	// 选择任务以撰写 Commit Message
 	context.subscriptions.push(vscode.commands.registerCommand('zentao.pickTasksForCommit', () => {
 		if (!token) {
