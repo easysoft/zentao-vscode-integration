@@ -98,6 +98,13 @@ class zentaoAPI {
     }
 
     /**
+     * @returns {object} 存储的用户
+     */
+    get user() {
+        return this._user;
+    }
+
+    /**
      * 获取当前用户
      * @returns {object} 当前登录的用户
      */
