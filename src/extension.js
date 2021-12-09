@@ -1,7 +1,7 @@
 const vscode = require('vscode');
-const {default: axios} = require('axios');
+const {zentaoAPI} = require('./zentao-api');
 
-let baseURL, token = '';
+let api;
 
 const isTerminalExist = () => vscode.window.terminals.length !== 0;
 const executeCommandInTerminal = command => {
@@ -14,12 +14,14 @@ const executeCommandInTerminal = command => {
  * @param {vscode.ExtensionContext} context
  */
 const activate = (context) => {
+	api = new zentaoAPI(context);
+
 	// 登录禅道
 	context.subscriptions.push(vscode.commands.registerCommand('zentao.login', async () => {
-		let account, password;
+		let account, password, baseURL;
 		const url = await vscode.window.showInputBox({
-			placeHolder: 'http://172.31.44.116/zentao/',
-			value: 'http://172.31.44.116/zentao/',
+			placeHolder: 'http://172.17.18.80/zentao/',
+			value: 'http://192.168.0.45:8086/tmp/zentaopms/www/',
 			validateInput: input => /https?:\/{2}.*\//.test(input) ? '' : '请输入完整的禅道 URL',
 			prompt: '输入禅道后端地址',
 			ignoreFocusOut: true,
@@ -27,7 +29,7 @@ const activate = (context) => {
 		if (url) {
 			baseURL = `${url}`;
 			account = await vscode.window.showInputBox({
-				placeHolder: 'admin',
+				placeHolder: 'dev1',
 				value: 'admin',
 				prompt: '输入禅道用户名',
 				validateInput: input => input.length ? '' : '请输入用户名',
@@ -48,12 +50,12 @@ const activate = (context) => {
 		if (!url || !account || !password) {
 			return vscode.window.showWarningMessage('信息不完整，登录终止');
 		}
-		vscode.window.showInformationMessage(`将使用 ${account}:${'*'.repeat(password.length)} 在 ${url} 登录`);
-		axios.post(`${baseURL}api.php/v1/tokens`, {account, password}, {
-			headers: {'Content-Type': 'application/json'}
-		}).then(res => {
-			({token} = res.data);
-			vscode.window.showInformationMessage(`登录成功，获得 token: ${token}`);
+		vscode.window.showInformationMessage(`将使用 ${account}:${'*'.repeat(password.length)} 登录 ${url}`);
+		api.login({url: baseURL, account, password}).then(profile => {
+			vscode.window.showInformationMessage(`登录成功，当前用户 ${profile.realname}`);
+		}).catch(e => {
+			console.log(e);
+			vscode.window.showWarningMessage(`登录失败`);
 		});
 	}));
 
