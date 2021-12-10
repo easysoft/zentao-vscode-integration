@@ -136,7 +136,10 @@ const activate = (context) => {
 				}
 				items = await api.getExecutionTasks(currentExecution.id);
 		}
-		items = formatZentaoObjectsForPicker(items);
+		items = formatZentaoObjectsForPicker(items, {
+			assignedToMe: typePick.type !== 'story',
+			prefix: typePick.label,
+		});
 		if (!items) {
 			return vscode.window.showWarningMessage('没有可选项');
 		}
