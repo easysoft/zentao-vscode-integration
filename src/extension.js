@@ -216,7 +216,7 @@ const activate = (context) => {
 			const linePrefix = document.lineAt(position).text.substr(0, position.character);
 			let matchType = null;
 			if (![{type: 'task', prefix: '任务'}, {type: 'bug', prefix: 'Bug'}, {type: 'story', prefix: '需求'}].some(type => {
-				if (linePrefix.endsWith(`${type.type} #`)) {
+				if (linePrefix.toLowerCase().endsWith(`${type.type} #`)) {
 					matchType = type;
 					return true;
 				}
