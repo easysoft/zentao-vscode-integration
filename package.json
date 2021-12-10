@@ -28,38 +28,38 @@
 		"commands": [
 			{
 				"command": "zentao.login",
-				"title": "登录",
-				"category": "禅道"
+				"title": "配置 (config)",
+				"category": "禅道 (Zentao)"
 			},
 			{
 				"command": "zentao.selectProduct",
-				"title": "切换当前产品",
-				"category": "禅道"
+				"title": "切换当前产品 (change product)",
+				"category": "禅道 (Zentao)"
 			},
 			{
 				"command": "zentao.selectProject",
-				"title": "切换当前项目",
-				"category": "禅道"
+				"title": "切换当前项目 (change project)",
+				"category": "禅道 (Zentao)"
 			},
 			{
 				"command": "zentao.selectExecution",
-				"title": "切换当前执行",
-				"category": "禅道"
+				"title": "切换当前执行 (change execution)",
+				"category": "禅道 (Zentao)"
 			},
 			{
 				"command": "zentao.pickObjectsForCommit",
-				"title": "选择任务形成 Commit Message",
-				"category": "禅道"
+				"title": "选择对象形成 Commit Message (pick objects for commit)",
+				"category": "禅道 (Zentao)"
 			},
 			{
 				"command": "zentao.viewTasks",
 				"title": "查看任务",
-				"category": "禅道"
+				"category": "禅道 (Zentao)"
 			},
 			{
 				"command": "zentao.writeCommitMessage",
 				"title": "撰写 Commit Message (自动补全)",
-				"category": "禅道"
+				"category": "禅道 (Zentao)"
 			}
 		]
 	},
