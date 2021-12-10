@@ -16,6 +16,8 @@
 	"activationEvents": [
 		"onCommand:zentao.login",
 		"onCommand:zentao.selectProduct",
+		"onCommand:zentao.selectProject",
+		"onCommand:zentao.selectExecution",
 		"onCommand:zentao.pickTasksForCommit",
 		"onCommand:zentao.viewTasks",
 		"onCommand:zentao.writeCommitMessage",
@@ -32,6 +34,16 @@
 			{
 				"command": "zentao.selectProduct",
 				"title": "切换当前产品",
+				"category": "禅道"
+			},
+			{
+				"command": "zentao.selectProject",
+				"title": "切换当前项目",
+				"category": "禅道"
+			},
+			{
+				"command": "zentao.selectExecution",
+				"title": "切换当前执行",
 				"category": "禅道"
 			},
 			{

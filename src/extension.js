@@ -67,6 +67,43 @@ const activate = (context) => {
 		}
 	}));
 
+	// 选择当前工作区对应的项目
+	context.subscriptions.push(vscode.commands.registerCommand('zentao.selectProject', async () => {
+		const projects = await api.getProjects();
+		const pick = await vscode.window.showQuickPick(projects.map(project => ({
+			id: project.id,
+			name: project.name,
+			label: project.name,
+			detail: project.desc,
+		})));
+		if (pick) {
+			delete pick.label;
+			context.workspaceState.update('zentaoProject', pick);
+			context.workspaceState.update('zentaoExecution', null);
+			vscode.window.showInformationMessage(`设置成功，当前项目为 "${pick.name}，迭代选择已重置"`);
+		}
+	}));
+
+	// 选择当前工作区对应的迭代
+	context.subscriptions.push(vscode.commands.registerCommand('zentao.selectExecution', async () => {
+		const currentProject = context.workspaceState.get('zentaoProject');
+		if (!currentProject) {
+			return vscode.window.showWarningMessage('请先选择产品、项目再选择迭代');
+		}
+		const projects = await api.getProjectExecutions(currentProject.id);
+		const pick = await vscode.window.showQuickPick(projects.map(project => ({
+			id: project.id,
+			name: project.name,
+			label: project.name,
+			detail: project.desc,
+		})));
+		if (pick) {
+			delete pick.label;
+			context.workspaceState.update('zentaoExecution', pick);
+			vscode.window.showInformationMessage(`设置成功，当前迭代为 "${pick.name}"`);
+		}
+	}));
+
 	// 选择任务以撰写 Commit Message
 	context.subscriptions.push(vscode.commands.registerCommand('zentao.pickTasksForCommit', () => {
 		if (!token) {

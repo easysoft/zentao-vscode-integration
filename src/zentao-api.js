@@ -162,6 +162,25 @@ class zentaoAPI {
     }
 
     /**
+     * 获取项目列表
+     * @returns {object[]} 项目列表
+     */
+    async getProjects() {
+        const response = await this.get('projects');
+        return response.data.projects;
+    }
+
+    /**
+     * 获取项目详情
+     * @param {number} project 项目 ID
+     * @returns {object} 项目
+     */
+    async getProject(project) {
+        const response = await this.get(`projects/${project}`);
+        return response.data;
+    }
+
+    /**
      * 获取产品的需求
      * @param {number} product 产品 ID
      * @returns {object[]} 需求列表
@@ -179,6 +198,16 @@ class zentaoAPI {
     async getProductBugs(product) {
         const response = await this.get(`products/${product}/bugs`);
         return response.data.bugs;
+    }
+
+    /**
+     * 获取项目的执行列表
+     * @param {number} project
+     * @returns {object[]} 执行列表
+     */
+    async getProjectExecutions(project) {
+        const response = await this.get(`project/${project}/executions`);
+        return response.data.executions;
     }
 
     /**
