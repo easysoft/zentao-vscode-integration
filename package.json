@@ -1,9 +1,10 @@
 {
 	"name": "zentao",
-	"displayName": "zentao",
+	"displayName": "禅道",
 	"description": "Zentao integration.",
 	"publisher": "EasyCorp",
-	"version": "0.1.0",
+	"version": "0.2.0",
+	"preview": true,
 	"engines": {
 		"vscode": "^1.62.0"
 	},
