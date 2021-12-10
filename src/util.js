@@ -27,8 +27,29 @@ const getGitRepos = () => {
     return git.repositories;
 }
 
+/**
+ * 为选择操作过滤和处理禅道中的对象（需求、任务、Bug 等）
+ * @param {object[]} objects 需要格式化的对象
+ * @param {object} user 当前用户
+ * @param {object} options 可选参数
+ * @param {bool} [options.assignedToMe] 只保留指派给当前用户的对象
+ * @param {string} [options.prefix] 每项的前缀
+ * @returns {object[]} 适用于选择操作的对象数组
+ */
+const formatZentaoObjectsForPicker = (objects, user = null, options = {}) => {
+    if (options.assignedToMe && user) {
+        objects = objects.filter(o => o.assignedTo && o.assignedTo.id === user.id);
+    }
+
+    return objects.map(o => ({
+        id: o.id,
+        label: `${options.prefix ? `${options.prefix} ` : ''}#${o.id}: ${o.name}`,
+    }));
+}
+
 module.exports = {
     isTerminalExist,
     executeCommandInTerminal,
     getGitRepos,
+    formatZentaoObjectsForPicker,
 }

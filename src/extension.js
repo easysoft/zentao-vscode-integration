@@ -1,6 +1,6 @@
 const vscode = require('vscode');
 const {zentaoAPI} = require('./zentao-api');
-const {executeCommandInTerminal, getGitRepos} = require('./util');
+const {executeCommandInTerminal, getGitRepos, formatZentaoObjectsForPicker} = require('./util');
 
 /**
  * @param {vscode.ExtensionContext} context
@@ -104,27 +104,57 @@ const activate = (context) => {
 		}
 	}));
 
-	// 选择任务以撰写 Commit Message
-	context.subscriptions.push(vscode.commands.registerCommand('zentao.pickTasksForCommit', () => {
-		if (!token) {
-			return vscode.window.showErrorMessage('请先登录禅道');
+	// 选择对象以撰写 Commit Message
+	context.subscriptions.push(vscode.commands.registerCommand('zentao.pickObjectsForCommit', async () => {
+		const typePick = await vscode.window.showQuickPick([
+			{type: 'story', label: '需求'},
+			{type: 'task', label: '任务'},
+			{type: 'bug', label: 'Bug'},
+		]);
+		if (!typePick) {
+			return;
 		}
-		axios.get(`${baseURL}my-work-task.json`, {
-			headers: {'Content-Type': 'application/json', 'Token': token}
-		}).then(res => {
-			const resData = JSON.parse(res.data.data);
-			vscode.window.showQuickPick(resData.tasks.map(task => `任务 #${task.id}: ${task.name}`), {
-				canPickMany: true,
-			}).then(items => {
-				const taskText = items.reduce((pv, cv) => pv += `${/ (#\d+): /.exec(cv)[1]}, `, 'task ').replace(/, $/, '');
-				vscode.window.showInputBox({
-					prompt: '输入 Commit Message 内容',
-					ignoreFocusOut: true,
-				}).then(text => {
-					executeCommandInTerminal(`git commit -m "* ${text.replace('"', '\\"')}, ${taskText}."`);
-				})
-			});
+		const currentProduct = context.workspaceState.get('zentaoProduct');
+		const currentExecution = context.workspaceState.get('zentaoExecution');
+		let items;
+		switch (typePick.type) {
+			case 'story':
+				if (!currentProduct) {
+					return vscode.window.showWarningMessage('请先选择产品再选择需求');
+				}
+				items = await api.getProductStories(currentProduct.id);
+				break;
+			case 'bug':
+				if (!currentProduct) {
+					return vscode.window.showWarningMessage('请先选择产品再选择 Bug');
+				}
+				items = await api.getProductBugs(currentProduct.id);
+				break;
+			case 'task':
+				if (!currentExecution) {
+					return vscode.window.showWarningMessage('请先选择执行再选择任务');
+				}
+				items = await api.getExecutionTasks(currentExecution.id);
+		}
+		items = formatZentaoObjectsForPicker(items);
+		if (!items) {
+			return vscode.window.showWarningMessage('没有可选项');
+		}
+
+		const objectPick = await vscode.window.showQuickPick(items, {canPickMany: true});
+		if (!objectPick) {
+			return;
+		}
+
+		const commitMessageAffix = items.reduce((pv, item) => pv += `#${item.id}, `, `${typePick.type} `).replace(/, $/, '');
+		const commitMessage = await vscode.window.showInputBox({
+			prompt: '请输入 Commit Message 内容',
+			ignoreFocusOut: true
 		});
+
+		if (commitMessage) {
+			executeCommandInTerminal(`git commit -m "* ${commitMessage.replace('"', '\\"')}, ${commitMessageAffix}."`, false);
+		}
 	}));
 
 	// 选择并在浏览器中打开任务

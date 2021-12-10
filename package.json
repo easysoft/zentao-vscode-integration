@@ -18,7 +18,7 @@
 		"onCommand:zentao.selectProduct",
 		"onCommand:zentao.selectProject",
 		"onCommand:zentao.selectExecution",
-		"onCommand:zentao.pickTasksForCommit",
+		"onCommand:zentao.pickObjectsForCommit",
 		"onCommand:zentao.viewTasks",
 		"onCommand:zentao.writeCommitMessage",
 		"onLanguage:git-commit"
@@ -47,7 +47,7 @@
 				"category": "禅道"
 			},
 			{
-				"command": "zentao.pickTasksForCommit",
+				"command": "zentao.pickObjectsForCommit",
 				"title": "选择任务形成 Commit Message",
 				"category": "禅道"
 			},
