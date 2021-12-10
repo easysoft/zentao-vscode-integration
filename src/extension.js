@@ -140,7 +140,7 @@ const activate = (context) => {
 			assignedToMe: typePick.type !== 'story',
 			prefix: typePick.label,
 		});
-		if (!items) {
+		if (!items || !items.length) {
 			return vscode.window.showWarningMessage('没有可选项');
 		}
 
@@ -195,7 +195,7 @@ const activate = (context) => {
 		items = formatZentaoObjectsForPicker(items, {
 			prefix: typePick.label,
 		});
-		if (!items) {
+		if (!items || !items.length) {
 			return vscode.window.showWarningMessage('没有可选项');
 		}
 
