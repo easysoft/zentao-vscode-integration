@@ -138,7 +138,7 @@ const activate = (context) => {
 				}
 				items = await api.getExecutionTasks(currentExecution.id);
 		}
-		items = formatZentaoObjectsForPicker(items, {
+		items = formatZentaoObjectsForPicker(items, api.user, {
 			assignedToMe: typePick.type !== 'story',
 			prefix: typePick.label,
 		});
@@ -194,7 +194,7 @@ const activate = (context) => {
 				}
 				items = await api.getExecutionTasks(currentExecution.id);
 		}
-		items = formatZentaoObjectsForPicker(items, {
+		items = formatZentaoObjectsForPicker(items, null, {
 			prefix: typePick.label,
 		});
 		if (!items || !items.length) {
@@ -250,7 +250,7 @@ const activate = (context) => {
 					items = await api.getProductStories(currentProduct.id);
 					break;
 			}
-			items = formatZentaoObjectsForPicker(items, {
+			items = formatZentaoObjectsForPicker(items, null, {
 				prefix: matchType.prefix,
 			});
 			if (!items || !items.length) {

@@ -75,7 +75,7 @@ const formatZentaoObjectsForPicker = (objects, user = null, options = {}) => {
 
     return objects.map(o => ({
         id: o.id,
-        label: `${options.prefix ? `${options.prefix} ` : ''}#${o.id}: ${o.name}`,
+        label: `${options.prefix ? `${options.prefix} ` : ''}#${o.id}: ${o.title || o.name}`,
     }));
 };
 
