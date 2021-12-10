@@ -70,9 +70,15 @@ class zentaoAPI {
      * 获取存储的禅道登录地址、凭据信息
      * @returns {Promise}
      */
-    getCredentials() {
-        const storePromises = ['url', 'account', 'password', 'token'].map(key => storePromises.push(this._context.secrets.get(key)));
-        return Promise.allSettled(storePromises);
+    async getCredentials() {
+        const keys = ['url', 'account', 'password', 'token'];
+        const storePromises = keys.map(key => this._context.secrets.get(key));
+        const storedValues = await Promise.allSettled(storePromises);
+        let creds = {};
+        storedValues.forEach((item, index) => {
+            creds[keys[index]] = item.value;
+        })
+        return creds;
     }
 
     /**

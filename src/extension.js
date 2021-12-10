@@ -11,9 +11,11 @@ const activate = (context) => {
 	// 登录禅道
 	context.subscriptions.push(vscode.commands.registerCommand('zentao.login', async () => {
 		let account, password, baseURL;
+		const previousCredentials = await api.getCredentials();
+		console.log(previousCredentials);
 		const url = await vscode.window.showInputBox({
-			placeHolder: 'http://172.17.18.80/zentao/',
-			value: 'http://192.168.0.45:8086/tmp/zentaopms/www/',
+			placeHolder: 'https://biz.demo15.zentao.net/',
+			value: previousCredentials.url || 'https://biz.demo15.zentao.net/',
 			validateInput: input => /https?:\/{2}.*\//.test(input) ? '' : '请输入完整的禅道 URL',
 			prompt: '输入禅道后端地址',
 			ignoreFocusOut: true,
@@ -21,8 +23,8 @@ const activate = (context) => {
 		if (url) {
 			baseURL = `${url}`;
 			account = await vscode.window.showInputBox({
-				placeHolder: 'dev1',
-				value: 'admin',
+				placeHolder: 'demo',
+				value: previousCredentials.account || 'demo',
 				prompt: '输入禅道用户名',
 				validateInput: input => input.length ? '' : '请输入用户名',
 				ignoreFocusOut: true,
@@ -31,7 +33,7 @@ const activate = (context) => {
 		if (account) {
 			password = await vscode.window.showInputBox({
 				placeHolder: '******',
-				value: '123456',
+				value: previousCredentials.password || '123456',
 				prompt: '输入禅道密码',
 				validateInput: input => input.length ? '' : '请输入密码',
 				password: true,
