@@ -23,8 +23,13 @@ const executeCommandInTerminal = (command, execute = true) => {
  */
 const getGitRepos = () => {
     const gitExtension = vscode.extensions.getExtension('vscode.git').exports;
-    const git = gitExtension.getAPI(1);
-    return git.repositories;
+    try {
+        const git = gitExtension.getAPI(1);
+        return git.repositories;
+    } catch(e) {
+        vscode.window.showErrorMessage('无法使用 git，请检查 git 是否已经安装并开启');
+        return [];
+    }
 };
 
 /**
