@@ -41,6 +41,20 @@ const commitWithMessage = message => {
 };
 
 /**
+ * 打开 COMMIT_EDITMSG 文件
+ */
+const openCommitMsgFile = () => {
+    const repos = getGitRepos();
+    if (!repos) {
+        return vscode.window.showWarningMessage('没有找到当前的 git 代码库');
+    }
+    const repoRootPath = repos[0].rootUri.path;
+    const path = repoRootPath.slice(1) + '/.git/COMMIT_EDITMSG';
+    const uri = vscode.Uri.file(path);
+    return vscode.commands.executeCommand('vscode.open', uri, {preview: false});
+};
+
+/**
  * 为选择操作过滤和处理禅道中的对象（需求、任务、Bug 等）
  * @param {object[]} objects 需要格式化的对象
  * @param {object} user 当前用户
@@ -65,5 +79,6 @@ module.exports = {
     executeCommandInTerminal,
     getGitRepos,
     commitWithMessage,
+    openCommitMsgFile,
     formatZentaoObjectsForPicker,
 };

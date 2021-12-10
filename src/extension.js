@@ -1,6 +1,6 @@
 const vscode = require('vscode');
 const {zentaoAPI} = require('./zentao-api');
-const {commitWithMessage, getGitRepos, formatZentaoObjectsForPicker} = require('./util');
+const {commitWithMessage, openCommitMsgFile, formatZentaoObjectsForPicker} = require('./util');
 
 /**
  * @param {vscode.ExtensionContext} context
@@ -208,16 +208,7 @@ const activate = (context) => {
 	}));
 
 	// 打开用于撰写 Commit Message 的文件
-	context.subscriptions.push(vscode.commands.registerCommand('zentao.writeCommitMessage', () => {
-		const repos = getGitRepos();
-		if (!repos) {
-			return vscode.window.showWarningMessage('没有找到当前的 git 代码库');
-		}
-		const repoRootPath = repos[0].rootUri.path;
-		const path = repoRootPath.slice(1) + '/.git/COMMIT_EDITMSG';
-		const uri = vscode.Uri.file(path);
-		return vscode.commands.executeCommand('vscode.open', uri, {preview: false});
-	}));
+	context.subscriptions.push(vscode.commands.registerCommand('zentao.writeCommitMessage', openCommitMsgFile));
 
 	// Git Commit Message 任务 ID 自动补全
 	vscode.languages.registerCompletionItemProvider('git-commit', {
