@@ -61,7 +61,7 @@ const openCommitMsgFile = () => {
  * @param {object} options 可选参数
  * @param {boolean} [options.assignedToMe] 只保留指派给当前用户的对象
  * @param {string} [options.prefix] 每项的前缀
- * @returns {object[]} 适用于选择操作的对象数组
+ * @returns {{id: number, label: string}[]} 适用于选择操作的对象数组
  */
 const formatZentaoObjectsForPicker = (objects, user = null, options = {}) => {
     if (options.assignedToMe && user) {
