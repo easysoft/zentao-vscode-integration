@@ -206,7 +206,7 @@ class zentaoAPI {
      * @returns {object[]} 执行列表
      */
     async getProjectExecutions(project) {
-        const response = await this.get(`project/${project}/executions`);
+        const response = await this.get(`projects/${project}/executions`);
         return response.data.executions;
     }
 
