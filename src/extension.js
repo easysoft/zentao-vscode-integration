@@ -213,19 +213,52 @@ const activate = (context) => {
 	// Git Commit Message 任务 ID 自动补全
 	vscode.languages.registerCompletionItemProvider('git-commit', {
 		provideCompletionItems: async (document, position) => {
-			if (!token) {
-				return undefined;
-			}
 			const linePrefix = document.lineAt(position).text.substr(0, position.character);
-			if (!linePrefix.endsWith('task #')) {
-				return undefined;
+			let matchType = null;
+			if (![{type: 'task', prefix: '任务'}, {type: 'bug', prefix: 'Bug'}, {type: 'story', prefix: '需求'}].some(type => {
+				if (linePrefix.endsWith(`${type.type} #`)) {
+					matchType = type;
+					return true;
+				}
+			})) {
+				return;
 			}
-			const res = await axios.get(`${baseURL}my-work-task.json`, {
-				headers: {'Content-Type': 'application/json', 'Token': token}
+
+			let currentExecution, currentProduct, items;
+			switch (matchType.type) {
+				case 'task':
+					currentExecution = context.workspaceState.get('zentaoExecution');
+					if (!currentExecution) {
+						return;
+					}
+					items = await api.getExecutionTasks(currentExecution.id);
+					break;
+				case 'bug':
+					currentProduct = context.workspaceState.get('zentaoProduct');
+					if (!currentProduct) {
+						return;
+					}
+					items = await api.getProductBugs(currentProduct.id);
+					break;
+				case 'story':
+					currentProduct = context.workspaceState.get('zentaoProduct');
+					if (!currentProduct) {
+						return;
+					}
+					items = await api.getProductStories(currentProduct.id);
+					break;
+			}
+			items = formatZentaoObjectsForPicker(items, {
+				prefix: matchType.prefix,
 			});
-			const resData = JSON.parse(res.data.data);
-			const completionItems = resData.tasks.map(task => `    任务 #${task.id}: ${task.name}`);
-			return completionItems.map(item => new vscode.CompletionItem({label: / #(\d+): /.exec(item)[1], detail: item}, vscode.CompletionItemKind.Value));
+			if (!items || !items.length) {
+				return;
+			}
+
+			return items.map(item => new vscode.CompletionItem({
+				label: `${item.id}`,
+				detail: `    ${matchType.prefix} ${item.label}`
+			}, vscode.CompletionItemKind.Value));
 		},
 	}, '#');
 };
