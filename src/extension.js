@@ -80,7 +80,7 @@ const activate = (context) => {
 			delete pick.label;
 			context.workspaceState.update('zentaoProject', pick);
 			context.workspaceState.update('zentaoExecution', null);
-			vscode.window.showInformationMessage(`设置成功，当前项目为 "${pick.name}，迭代选择已重置"`);
+			vscode.window.showInformationMessage(`设置成功，当前项目为 "${pick.name}"，迭代选择已重置`);
 		}
 	}));
 
