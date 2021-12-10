@@ -19,7 +19,7 @@
 		"onCommand:zentao.selectProject",
 		"onCommand:zentao.selectExecution",
 		"onCommand:zentao.pickObjectsForCommit",
-		"onCommand:zentao.viewTasks",
+		"onCommand:zentao.viewObject",
 		"onCommand:zentao.writeCommitMessage",
 		"onLanguage:git-commit"
 	],
@@ -52,8 +52,8 @@
 				"category": "禅道 (Zentao)"
 			},
 			{
-				"command": "zentao.viewTasks",
-				"title": "查看任务",
+				"command": "zentao.viewObject",
+				"title": "查看 (view)",
 				"category": "禅道 (Zentao)"
 			},
 			{

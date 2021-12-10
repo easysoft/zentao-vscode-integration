@@ -161,18 +161,50 @@ const activate = (context) => {
 	}));
 
 	// 选择并在浏览器中打开任务
-	context.subscriptions.push(vscode.commands.registerCommand('zentao.viewTasks', () => {
-		if (!token) {
-			return vscode.window.showErrorMessage('请先登录禅道');
+	context.subscriptions.push(vscode.commands.registerCommand('zentao.viewObject', async () => {
+		const typePick = await vscode.window.showQuickPick([
+			{type: 'story', label: '需求'},
+			{type: 'task', label: '任务'},
+			{type: 'bug', label: 'Bug'},
+		]);
+		if (!typePick) {
+			return;
 		}
-		axios.get(`${baseURL}my-work-task.json`, {
-			headers: {'Content-Type': 'application/json', 'Token': token}
-		}).then(res => {
-			const resData = JSON.parse(res.data.data);
-			vscode.window.showQuickPick(resData.tasks.map(task => `任务 #${task.id}: ${task.name}`)).then(item => {
-				vscode.env.openExternal(`${baseURL}task-view-${/ #(\d+): /.exec(item)[1]}.html`);
-			});
+		const currentProduct = context.workspaceState.get('zentaoProduct');
+		const currentExecution = context.workspaceState.get('zentaoExecution');
+		let items;
+		switch (typePick.type) {
+			case 'story':
+				if (!currentProduct) {
+					return vscode.window.showWarningMessage('请先选择产品再选择需求');
+				}
+				items = await api.getProductStories(currentProduct.id);
+				break;
+			case 'bug':
+				if (!currentProduct) {
+					return vscode.window.showWarningMessage('请先选择产品再选择 Bug');
+				}
+				items = await api.getProductBugs(currentProduct.id);
+				break;
+			case 'task':
+				if (!currentExecution) {
+					return vscode.window.showWarningMessage('请先选择执行再选择任务');
+				}
+				items = await api.getExecutionTasks(currentExecution.id);
+		}
+		items = formatZentaoObjectsForPicker(items, {
+			prefix: typePick.label,
 		});
+		if (!items) {
+			return vscode.window.showWarningMessage('没有可选项');
+		}
+
+		const objectPick = await vscode.window.showQuickPick(items);
+		if (!objectPick) {
+			return;
+		}
+
+		vscode.env.openExternal(`${api.baseURL}${typePick.type}-view-${objectPick.id}.html?zentaosid=${api.token}`);
 	}));
 
 	// 打开用于撰写 Commit Message 的文件
@@ -205,8 +237,8 @@ const activate = (context) => {
 			return completionItems.map(item => new vscode.CompletionItem({label: / #(\d+): /.exec(item)[1], detail: item}, vscode.CompletionItemKind.Value));
 		},
 	}, '#');
-}
+};
 
 module.exports = {
 	activate,
-}
+};

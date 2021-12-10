@@ -105,6 +105,20 @@ class zentaoAPI {
     }
 
     /**
+     * @returns {string} 存储的 token
+     */
+    get token() {
+        return this._token;
+    }
+
+    /**
+     * @returns {string} 存储的 URL
+     */
+    get baseURL() {
+        return this._baseURL;
+    }
+
+    /**
      * 获取当前用户
      * @returns {object} 当前登录的用户
      */
