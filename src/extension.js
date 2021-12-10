@@ -88,7 +88,7 @@ const activate = (context) => {
 	context.subscriptions.push(vscode.commands.registerCommand('zentao.selectExecution', async () => {
 		const currentProject = context.workspaceState.get('zentaoProject');
 		if (!currentProject) {
-			return vscode.window.showWarningMessage('请先选择产品、项目再选择迭代');
+			return vscode.window.showWarningMessage('请先选择项目再选择迭代');
 		}
 		const projects = await api.getProjectExecutions(currentProject.id);
 		const pick = await vscode.window.showQuickPick(projects.map(project => ({
