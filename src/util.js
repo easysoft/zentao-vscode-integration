@@ -2,14 +2,14 @@ const vscode = require('vscode');
 
 /**
  * 判断是否已经存在命令行终端
- * @returns {bool}
+ * @returns {boolean}
  */
 const isTerminalExist = () => vscode.window.terminals.length !== 0;
 
 /**
  * 在命令行终端执行命令
  * @param {string} command 命令
- * @param {bool} execute 是否立刻执行
+ * @param {boolean} execute 是否立刻执行
  */
 const executeCommandInTerminal = (command, execute = true) => {
     const terminal = isTerminalExist() ? vscode.window.activeTerminal : vscode.window.createTerminal();
@@ -32,7 +32,7 @@ const getGitRepos = () => {
  * @param {object[]} objects 需要格式化的对象
  * @param {object} user 当前用户
  * @param {object} options 可选参数
- * @param {bool} [options.assignedToMe] 只保留指派给当前用户的对象
+ * @param {boolean} [options.assignedToMe] 只保留指派给当前用户的对象
  * @param {string} [options.prefix] 每项的前缀
  * @returns {object[]} 适用于选择操作的对象数组
  */
