@@ -2,8 +2,14 @@
 	"name": "zentao",
 	"displayName": "禅道",
 	"description": "Zentao integration.",
-	"publisher": "EasyCorp",
+	"publisher": "Nature Easy Soft Network Technology Co., LTD",
 	"version": "0.2.0",
+	"icon": "images/logo.png",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/easysoft/vscode-zentao"
+	},
+	"license": "MIT",
 	"preview": true,
 	"engines": {
 		"vscode": "^1.62.0"
