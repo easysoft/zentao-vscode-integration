@@ -15,7 +15,7 @@ const executeCommandInTerminal = (command, execute = true) => {
     const terminal = isTerminalExist() ? vscode.window.activeTerminal : vscode.window.createTerminal();
 	terminal.show();
 	terminal.sendText(command, execute);
-}
+};
 
 /**
  * 获取当前工作区的 git 仓库
@@ -25,7 +25,20 @@ const getGitRepos = () => {
     const gitExtension = vscode.extensions.getExtension('vscode.git').exports;
     const git = gitExtension.getAPI(1)
     return git.repositories;
-}
+};
+
+/**
+ * 创建一个 Commit
+ * @param {string} message commit message
+ */
+const commitWithMessage = message => {
+    const repos = getGitRepos();
+    if (repos.length !== 1) {
+        return executeCommandInTerminal(`git commit -m "${message.replace('"', '\\"')}"`, false);
+    }
+    repos[0].inputBox.value = message;
+    vscode.commands.executeCommand('workbench.scm.focus');
+};
 
 /**
  * 为选择操作过滤和处理禅道中的对象（需求、任务、Bug 等）
@@ -45,11 +58,12 @@ const formatZentaoObjectsForPicker = (objects, user = null, options = {}) => {
         id: o.id,
         label: `${options.prefix ? `${options.prefix} ` : ''}#${o.id}: ${o.name}`,
     }));
-}
+};
 
 module.exports = {
     isTerminalExist,
     executeCommandInTerminal,
     getGitRepos,
+    commitWithMessage,
     formatZentaoObjectsForPicker,
-}
+};

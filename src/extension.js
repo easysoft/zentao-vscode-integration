@@ -1,6 +1,6 @@
 const vscode = require('vscode');
 const {zentaoAPI} = require('./zentao-api');
-const {executeCommandInTerminal, getGitRepos, formatZentaoObjectsForPicker} = require('./util');
+const {commitWithMessage, getGitRepos, formatZentaoObjectsForPicker} = require('./util');
 
 /**
  * @param {vscode.ExtensionContext} context
@@ -156,7 +156,7 @@ const activate = (context) => {
 		});
 
 		if (commitMessage) {
-			executeCommandInTerminal(`git commit -m "* ${commitMessage.replace('"', '\\"')}, ${commitMessageAffix}."`, false);
+			commitWithMessage(`* ${commitMessage.replace('"', '\\"')}, ${commitMessageAffix}.`);
 		}
 	}));
 
