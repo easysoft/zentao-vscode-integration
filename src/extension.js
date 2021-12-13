@@ -151,7 +151,7 @@ const activate = (context) => {
 			return;
 		}
 
-		const commitMessageAffix = items.reduce((pv, item) => pv += `#${item.id}, `, `${typePick.type} `).replace(/, $/, '');
+		const commitMessageAffix = objectPick.reduce((pv, item) => pv += `#${item.id}, `, `${typePick.type} `).replace(/, $/, '');
 		const commitMessage = await vscode.window.showInputBox({
 			prompt: '请输入 Commit Message 内容',
 			ignoreFocusOut: true
