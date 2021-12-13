@@ -51,7 +51,7 @@ const commitWithMessage = message => {
  */
 const openCommitMsgFile = () => {
     const repos = getGitRepos();
-    if (!repos) {
+    if (!repos || !repos.length) {
         return vscode.window.showWarningMessage('没有找到当前的 git 代码库');
     }
     const repoRootPath = repos[0].rootUri.path;
