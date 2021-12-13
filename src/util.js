@@ -39,6 +39,9 @@ const getGitRepos = () => {
  */
 const commitWithMessage = message => {
     const repos = getGitRepos();
+    if (!repos || !repos.length) {
+        return vscode.window.showWarningMessage('没有找到当前的 git 代码库');
+    }
     if (repos.length !== 1) {
         return executeCommandInTerminal(`git commit -m "${message.replace('"', '\\"')}"`, false);
     }
