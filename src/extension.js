@@ -92,12 +92,12 @@ const activate = (context) => {
 		if (!currentProject) {
 			return vscode.window.showWarningMessage('请先选择项目再选择执行');
 		}
-		const projects = await api.getProjectExecutions(currentProject.id);
-		const pick = await vscode.window.showQuickPick(projects.map(project => ({
-			id: project.id,
-			name: project.name,
-			label: project.name,
-			detail: project.desc,
+		const executions = await api.getProjectExecutions(currentProject.id);
+		const pick = await vscode.window.showQuickPick(executions.map(execution => ({
+			id: execution.id,
+			name: execution.name,
+			label: execution.name,
+			detail: execution.desc,
 		})));
 		if (pick) {
 			delete pick.label;
