@@ -1,4 +1,5 @@
 const vscode = require('vscode');
+const stripTags = require('striptags');
 
 /**
  * 判断是否已经存在命令行终端
@@ -86,4 +87,5 @@ module.exports = {
     commitWithMessage,
     openCommitMsgFile,
     formatZentaoObjectsForPicker,
+    stripTags,
 };
