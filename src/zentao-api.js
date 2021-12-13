@@ -98,6 +98,19 @@ class zentaoAPI {
     }
 
     /**
+     * GET 一个带分页的禅道 API 的全部数据（limit 设置为 total）
+     * @param {string} path 路径
+     * @returns {Promise<import('axios').AxiosResponse>}
+     */
+    async getAll(path) {
+        const firstResponse = await this.get(path);
+        if (firstResponse.data.limit >= firstResponse.data.total) {
+            return firstResponse;
+        }
+        return await this.get(`${path}?limit=${firstResponse.data.total}`);
+    }
+
+    /**
      * POST 一个禅道 API
      * @param {string} path 路径
      * @returns {Promise<import('axios').AxiosResponse>}
@@ -177,7 +190,7 @@ class zentaoAPI {
      * @returns {object[]} 产品列表
      */
     async getProducts() {
-        const response = await this.get('products');
+        const response = await this.getAll('products');
         return response.data.products;
     }
 
@@ -196,7 +209,7 @@ class zentaoAPI {
      * @returns {object[]} 项目列表
      */
     async getProjects() {
-        const response = await this.get('projects');
+        const response = await this.getAll('projects');
         return response.data.projects;
     }
 
@@ -216,7 +229,7 @@ class zentaoAPI {
      * @returns {object[]} 需求列表
      */
     async getProductStories(product) {
-        const response = await this.get(`products/${product}/stories`);
+        const response = await this.getAll(`products/${product}/stories`);
         return response.data.stories;
     }
 
@@ -226,7 +239,7 @@ class zentaoAPI {
      * @returns {object[]} bug 列表
      */
     async getProductBugs(product) {
-        const response = await this.get(`products/${product}/bugs`);
+        const response = await this.getAll(`products/${product}/bugs`);
         return response.data.bugs;
     }
 
@@ -236,7 +249,7 @@ class zentaoAPI {
      * @returns {object[]} 执行列表
      */
     async getProjectExecutions(project) {
-        const response = await this.get(`projects/${project}/executions`);
+        const response = await this.getAll(`projects/${project}/executions`);
         return response.data.executions;
     }
 
@@ -246,7 +259,7 @@ class zentaoAPI {
      * @returns {object[]} 任务列表
      */
     async getExecutionTasks(execution) {
-        const response = await this.get(`executions/${execution}/tasks`);
+        const response = await this.getAll(`executions/${execution}/tasks`);
         return response.data.tasks;
     }
 
