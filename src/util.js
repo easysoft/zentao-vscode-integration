@@ -49,7 +49,7 @@ const commitWithMessage = message => {
 /**
  * 打开 COMMIT_EDITMSG 文件
  */
-const openCommitMsgFile = () => {
+const openCommitMsgFile = async () => {
     const repos = getGitRepos();
     if (!repos || !repos.length) {
         return vscode.window.showWarningMessage('没有找到当前的 git 代码库');
@@ -57,6 +57,12 @@ const openCommitMsgFile = () => {
     const repoRootPath = repos[0].rootUri.path;
     const path = repoRootPath.slice(1) + '/.git/COMMIT_EDITMSG';
     const uri = vscode.Uri.file(path);
+    try {
+        await vscode.workspace.fs.stat(uri);
+    } catch (e) {
+        // 此时 COMMIT_EDITMSG 不存在，创建之
+        await vscode.workspace.fs.writeFile(uri, new Uint8Array());
+    }
     return vscode.commands.executeCommand('vscode.open', uri, {preview: false});
 };
 
