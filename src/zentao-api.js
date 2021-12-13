@@ -1,4 +1,4 @@
-// const vscode = require('vscode');
+const vscode = require('vscode');
 const {default: axios} = require('axios');
 
 // 与禅道 API 通讯
@@ -86,10 +86,15 @@ class zentaoAPI {
      * @param {string} path 路径
      * @returns {Promise<import('axios').AxiosResponse>}
      */
-    get(path) {
-        return axios.get(`${this._baseURL}api.php/v1/${path}`, {
-            headers: {'Content-Type': 'application/json', Token: this._token}
-        });
+    async get(path) {
+        try {
+            const response = await axios.get(`${this._baseURL}api.php/v1/${path}`, {
+                headers: {'Content-Type': 'application/json', Token: this._token}
+            });
+            return response;
+        } catch (error) {
+            return vscode.window.showErrorMessage('请求后端出错，请尝试重新登录，并检查用户权限');
+        }
     }
 
     /**
@@ -97,10 +102,15 @@ class zentaoAPI {
      * @param {string} path 路径
      * @returns {Promise<import('axios').AxiosResponse>}
      */
-    post(path, data) {
-        return axios.post(`${this._baseURL}api.php/v1/${path}`, data, {
-            headers: {'Content-Type': 'application/json', Token: this._token}
-        });
+    async post(path, data) {
+        try {
+            const response = await axios.post(`${this._baseURL}api.php/v1/${path}`, data, {
+                headers: {'Content-Type': 'application/json', Token: this._token}
+            });
+            return response;
+        } catch (error) {
+            return vscode.window.showErrorMessage('请求后端出错，请尝试重新登录，并检查用户权限');
+        }
     }
 
     /**
