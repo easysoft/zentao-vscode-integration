@@ -1,6 +1,6 @@
 const vscode = require('vscode');
 const {zentaoAPI} = require('./zentao-api');
-const {commitWithMessage, openCommitMsgFile, formatZentaoObjectsForPicker} = require('./util');
+const {commitWithMessage, openCommitMsgFile, formatZentaoObjectsForPicker, stripTags} = require('./util');
 
 /**
  * @param {vscode.ExtensionContext} context
@@ -60,7 +60,7 @@ const activate = (context) => {
 			id: product.id,
 			name: product.name,
 			label: product.name,
-			detail: product.desc,
+			detail: stripTags(product.desc),
 		})));
 		if (pick) {
 			delete pick.label;
@@ -76,7 +76,7 @@ const activate = (context) => {
 			id: project.id,
 			name: project.name,
 			label: project.name,
-			detail: project.desc,
+			detail: stripTags(project.desc),
 		})));
 		if (pick) {
 			delete pick.label;
@@ -97,7 +97,7 @@ const activate = (context) => {
 			id: execution.id,
 			name: execution.name,
 			label: execution.name,
-			detail: execution.desc,
+			detail: stripTags(execution.desc),
 		})));
 		if (pick) {
 			delete pick.label;
