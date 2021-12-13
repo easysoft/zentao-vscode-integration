@@ -82,15 +82,15 @@ const activate = (context) => {
 			delete pick.label;
 			context.workspaceState.update('zentaoProject', pick);
 			context.workspaceState.update('zentaoExecution', null);
-			vscode.window.showInformationMessage(`设置成功，当前项目为 "${pick.name}"，迭代选择已重置`);
+			vscode.window.showInformationMessage(`设置成功，当前项目为 "${pick.name}"，执行选择已重置`);
 		}
 	}));
 
-	// 选择当前工作区对应的迭代
+	// 选择当前工作区对应的执行
 	context.subscriptions.push(vscode.commands.registerCommand('zentao.selectExecution', async () => {
 		const currentProject = context.workspaceState.get('zentaoProject');
 		if (!currentProject) {
-			return vscode.window.showWarningMessage('请先选择项目再选择迭代');
+			return vscode.window.showWarningMessage('请先选择项目再选择执行');
 		}
 		const projects = await api.getProjectExecutions(currentProject.id);
 		const pick = await vscode.window.showQuickPick(projects.map(project => ({
@@ -102,7 +102,7 @@ const activate = (context) => {
 		if (pick) {
 			delete pick.label;
 			context.workspaceState.update('zentaoExecution', pick);
-			vscode.window.showInformationMessage(`设置成功，当前迭代为 "${pick.name}"`);
+			vscode.window.showInformationMessage(`设置成功，当前执行为 "${pick.name}"`);
 		}
 	}));
 
