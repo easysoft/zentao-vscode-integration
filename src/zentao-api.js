@@ -91,6 +91,9 @@ class zentaoAPI {
             const response = await axios.get(`${this._baseURL}api.php/v1/${path}`, {
                 headers: {'Content-Type': 'application/json', Token: this._token}
             });
+            if (!response || typeof response.data !== 'object') {
+                throw 'wrong data';
+            }
             return response;
         } catch (error) {
             return vscode.window.showErrorMessage('请求后端出错，请尝试重新登录，并检查用户权限');
@@ -104,6 +107,9 @@ class zentaoAPI {
      */
     async getAll(path) {
         const firstResponse = await this.get(path);
+        if (!firstResponse) {
+            return;
+        }
         if (firstResponse.data.limit >= firstResponse.data.total) {
             return firstResponse;
         }
@@ -120,6 +126,9 @@ class zentaoAPI {
             const response = await axios.post(`${this._baseURL}api.php/v1/${path}`, data, {
                 headers: {'Content-Type': 'application/json', Token: this._token}
             });
+            if (!response || typeof response.data !== 'object') {
+                throw 'wrong data';
+            }
             return response;
         } catch (error) {
             return vscode.window.showErrorMessage('请求后端出错，请尝试重新登录，并检查用户权限');
@@ -191,7 +200,7 @@ class zentaoAPI {
      */
     async getProducts() {
         const response = await this.getAll('products');
-        return response.data.products;
+        return response && response.data && response.data.products;
     }
 
     /**
@@ -201,7 +210,7 @@ class zentaoAPI {
      */
     async getProduct(product) {
         const response = await this.get(`products/${product}`);
-        return response.data;
+        return response && response.data && response.data;
     }
 
     /**
@@ -210,7 +219,7 @@ class zentaoAPI {
      */
     async getProjects() {
         const response = await this.getAll('projects');
-        return response.data.projects;
+        return response && response.data && response.data.projects;
     }
 
     /**
@@ -220,7 +229,7 @@ class zentaoAPI {
      */
     async getProject(project) {
         const response = await this.get(`projects/${project}`);
-        return response.data;
+        return response && response.data && response.data;
     }
 
     /**
@@ -230,7 +239,7 @@ class zentaoAPI {
      */
     async getProductStories(product) {
         const response = await this.getAll(`products/${product}/stories`);
-        return response.data.stories;
+        return response && response.data && response.data.stories;
     }
 
     /**
@@ -240,7 +249,7 @@ class zentaoAPI {
      */
     async getProductBugs(product) {
         const response = await this.getAll(`products/${product}/bugs`);
-        return response.data.bugs;
+        return response && response.data && response.data.bugs;
     }
 
     /**
@@ -250,7 +259,7 @@ class zentaoAPI {
      */
     async getProjectExecutions(project) {
         const response = await this.getAll(`projects/${project}/executions`);
-        return response.data.executions;
+        return response && response.data && response.data.executions;
     }
 
     /**
@@ -260,7 +269,7 @@ class zentaoAPI {
      */
     async getExecutionTasks(execution) {
         const response = await this.getAll(`executions/${execution}/tasks`);
-        return response.data.tasks;
+        return response && response.data && response.data.tasks;
     }
 
     /**
@@ -269,7 +278,7 @@ class zentaoAPI {
      */
     async getRepos() {
         const response = await this.get('repos');
-        return response.data.repos;
+        return response && response.data && response.data.repos;
     }
 }
 
