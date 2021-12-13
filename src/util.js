@@ -70,7 +70,7 @@ const openCommitMsgFile = () => {
  */
 const formatZentaoObjectsForPicker = (objects, user = null, options = {}) => {
     if (options.assignedToMe && user) {
-        objects = objects.filter(o => o.assignedTo && o.assignedTo.id === user.id);
+        objects = objects.filter(o => o.assignedTo && (typeof o.assignedTo === 'object' ? o.assignedTo.id === user.id : o.assignedTo === user.account));
     }
 
     return objects.map(o => ({
