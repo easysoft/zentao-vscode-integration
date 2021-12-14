@@ -266,10 +266,14 @@ const activate = (context) => {
 				return;
 			}
 
-			return items.map(item => new vscode.CompletionItem({
-				label: `${item.id}`,
-				detail: `    ${matchType.prefix} ${item.label}`
-			}, vscode.CompletionItemKind.Value));
+			return items.map(item => {
+				const completionItem = new vscode.CompletionItem({
+					label: `${item.id}`,
+					detail: `${''.padEnd(7 - `${item.id}`.length, ' ')}${item.label}`,
+				}, vscode.CompletionItemKind.Value);
+				completionItem.sortText = ' ';
+				return completionItem;
+			});
 		},
 	}, '#');
 };
