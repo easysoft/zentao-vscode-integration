@@ -29,22 +29,22 @@ class zentaoAPI {
         this._user = null;
 
         // 初始化时获取上次保存的凭据，并设置用户
-        Promise.all([
-            context.secrets.get('token').then(token => {
-                if (token) {
-                    this._token = token;
-                }
-            }),
-            context.secrets.get('url').then(url => {
-                if (url) {
-                    this._baseURL = url;
-                }
-            }),
-        ]).then(() => this.getCurrentUser().then(profile => {
-            if (profile) {
-                this._user = profile;
+        return (async () => {
+            const token = await context.secrets.get('token');
+            if (token) {
+                this._token = token;
             }
-        }));
+            const url = await context.secrets.get('url');
+            if (url) {
+                this._baseURL = url;
+            }
+            this.getCurrentUser().then(profile => {
+                if (profile) {
+                    this._user = profile;
+                }
+            });
+            return this;
+        })();
     }
 
     /**

@@ -5,8 +5,8 @@ const {commitWithMessage, openCommitMsgFile, formatZentaoObjectsForPicker, strip
 /**
  * @param {vscode.ExtensionContext} context
  */
-const activate = (context) => {
-	const api = new zentaoAPI(context);
+const activate = async (context) => {
+	const api = await new zentaoAPI(context); // 此处需要 await
 
 	// 登录禅道
 	context.subscriptions.push(vscode.commands.registerCommand('zentao.login', async () => {
