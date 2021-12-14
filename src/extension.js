@@ -56,6 +56,9 @@ const activate = (context) => {
 	// 选择当前工作区对应的产品
 	context.subscriptions.push(vscode.commands.registerCommand('zentao.selectProduct', async () => {
 		const products = await api.getProducts();
+		if (!products || !products.length) {
+			return vscode.window.showWarningMessage('没有可选项');
+		}
 		const pick = await vscode.window.showQuickPick(products.map(product => ({
 			id: product.id,
 			name: product.name,
@@ -72,6 +75,9 @@ const activate = (context) => {
 	// 选择当前工作区对应的项目
 	context.subscriptions.push(vscode.commands.registerCommand('zentao.selectProject', async () => {
 		const projects = await api.getProjects();
+		if (!projects || !projects.length) {
+			return vscode.window.showWarningMessage('没有可选项');
+		}
 		const pick = await vscode.window.showQuickPick(projects.map(project => ({
 			id: project.id,
 			name: project.name,
@@ -93,6 +99,9 @@ const activate = (context) => {
 			return vscode.window.showWarningMessage('请先选择项目再选择执行');
 		}
 		const executions = await api.getProjectExecutions(currentProject.id);
+		if (!executions || !executions.length) {
+			return vscode.window.showWarningMessage('没有可选项');
+		}
 		const pick = await vscode.window.showQuickPick(executions.map(execution => ({
 			id: execution.id,
 			name: execution.name,
