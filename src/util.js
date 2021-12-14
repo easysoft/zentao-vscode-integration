@@ -79,6 +79,9 @@ const openCommitMsgFile = async () => {
  * @returns {{id: number, label: string}[]} 适用于选择操作的对象数组
  */
 const formatZentaoObjectsForPicker = (objects, user = null, options = {}) => {
+    if (!objects) {
+        return;
+    }
     if (options.assignedToMe && user) {
         objects = objects.filter(o => o.assignedTo && (typeof o.assignedTo === 'object' ? o.assignedTo.id === user.id : o.assignedTo === user.account));
     }
