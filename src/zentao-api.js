@@ -96,7 +96,8 @@ class zentaoAPI {
             }
             return response;
         } catch (error) {
-            return vscode.window.showErrorMessage('请求后端出错，请尝试重新登录，并检查用户权限');
+            vscode.window.showErrorMessage('请求后端出错，请尝试重新登录，并检查用户权限');
+            return;
         }
     }
 
@@ -131,7 +132,8 @@ class zentaoAPI {
             }
             return response;
         } catch (error) {
-            return vscode.window.showErrorMessage('请求后端出错，请尝试重新登录，并检查用户权限');
+            vscode.window.showErrorMessage('请求后端出错，请尝试重新登录，并检查用户权限');
+            return;
         }
     }
 
