@@ -87,15 +87,18 @@ class zentaoAPI {
      * @returns {Promise<import('axios').AxiosResponse>}
      */
     async get(path) {
+        const url = `${this._baseURL}api.php/v1/${path}`;
         try {
-            const response = await axios.get(`${this._baseURL}api.php/v1/${path}`, {
+            const response = await axios.get(url, {
                 headers: {'Content-Type': 'application/json', Token: this._token}
             });
             if (!response || typeof response.data !== 'object') {
+                console.log(response);
                 throw 'wrong data';
             }
             return response;
         } catch (error) {
+            console.log(`GET from ${url} with token ${this._token} error: `, error);
             vscode.window.showErrorMessage('请求后端出错，请尝试重新登录，并检查用户权限');
             return;
         }
@@ -123,15 +126,18 @@ class zentaoAPI {
      * @returns {Promise<import('axios').AxiosResponse>}
      */
     async post(path, data) {
+        const url = `${this._baseURL}api.php/v1/${path}`;
         try {
-            const response = await axios.post(`${this._baseURL}api.php/v1/${path}`, data, {
+            const response = await axios.post(url, data, {
                 headers: {'Content-Type': 'application/json', Token: this._token}
             });
             if (!response || typeof response.data !== 'object') {
+                console.log(response);
                 throw 'wrong data';
             }
             return response;
         } catch (error) {
+            console.log(`POST to ${url} with token ${this._token} error: `, error);
             vscode.window.showErrorMessage('请求后端出错，请尝试重新登录，并检查用户权限');
             return;
         }
