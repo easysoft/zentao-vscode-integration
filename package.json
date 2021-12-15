@@ -2,7 +2,7 @@
 	"name": "zentao",
 	"displayName": "禅道",
 	"description": "Zentao integration.",
-	"publisher": "Nature Easy Soft Network Technology Co., LTD",
+	"publisher": "zentao",
 	"version": "0.2.4",
 	"icon": "images/logo.png",
 	"repository": {
