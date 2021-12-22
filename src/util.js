@@ -83,6 +83,10 @@ const formatZentaoObjectsForPicker = (objects, user = null, options = {}) => {
     if (!objects) {
         return;
     }
+
+    // 处理子任务、子需求
+    objects = objects.map(o => o.children ? [o, o.children] : o).flat(2);
+
     if (options.assignedToMe && user) {
         objects = objects.filter(o => o.assignedTo && (typeof o.assignedTo === 'object' ? o.assignedTo.id === user.id : o.assignedTo === user.account));
     }
@@ -115,7 +119,7 @@ const formatZentaoObjectsForPicker = (objects, user = null, options = {}) => {
 
     return objects.map(o => ({
         id: o.id,
-        label: `${options.prefix ? `${options.prefix} ` : ''}#${o.id}: ${o.title || o.name}`,
+        label: `${(o.parent && o.parent != -1) ? ' └ ' : ''}${options.prefix ? `${options.prefix} ` : ''}#${o.id}: ${o.title || o.name}`,
     }));
 };
 
