@@ -43,6 +43,11 @@ class zentaoAPI {
                     this._user = profile;
                 }
             });
+            this.getConfig().then(config => {
+                if (config) {
+                    this._zentaoConfig = config;
+                }
+            });
             return this;
         })();
     }
@@ -84,10 +89,12 @@ class zentaoAPI {
     /**
      * GET 一个禅道 API
      * @param {string} path 路径
+     * @param {object} options 其他参数
+     * @param {boolean} [options.customPath] 自定义请求路径，非 api.php 请求，会直接拼 path 到 baseURL 上
      * @returns {Promise<import('axios').AxiosResponse>}
      */
-    async get(path) {
-        const url = `${this._baseURL}api.php/v1/${path}`;
+    async get(path, options = {}) {
+        const url = `${this._baseURL}${options.customPath ? '' : 'api.php/v1/'}${path}`;
         try {
             const response = await axios.get(url, {
                 headers: {'Content-Type': 'application/json', Token: this._token}
@@ -157,6 +164,13 @@ class zentaoAPI {
     }
 
     /**
+     * @returns {object} 存储的禅道服务模式配置
+     */
+    get config() {
+        return this._zentaoConfig;
+    }
+
+    /**
      * @returns {object} 存储的用户
      */
     get user() {
@@ -175,6 +189,15 @@ class zentaoAPI {
      */
     get baseURL() {
         return this._baseURL;
+    }
+
+    /**
+     * 获取禅道服务模式
+     * @returns {object} 禅道服务模式
+     */
+    async getConfig() {
+        const response = await this.get('index.php?mode=getconfig', {customPath: true});
+        return response.data;
     }
 
     /**
@@ -211,7 +234,12 @@ class zentaoAPI {
             this._baseURL = credentials.url;
             await this.setCredentials({token});
         }
-        this._user = await this.getCurrentUser(credentials);
+        this.getConfig().then(config => {
+            if (config) {
+                this._zentaoConfig = config;
+            }
+        });
+        this._user = await this.getCurrentUser();
         return this._user;
     }
 
