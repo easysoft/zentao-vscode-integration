@@ -96,7 +96,6 @@ const formatZentaoObjectsForPicker = (objects, user = null, options = {}) => {
     switch (objectType) {
         case 'bug':
             const filterBugs = workspaceConfig.get('zentao.filter.filterBugs');
-            console.log(filterBugs);
             if (filterBugs) {
                 objects = objects.filter(o => o.status && ((typeof o.status === 'object' && o.status.code === 'active') || o.status === 'active'));
             }

@@ -12,7 +12,6 @@ const activate = async (context) => {
 	context.subscriptions.push(vscode.commands.registerCommand('zentao.login', async () => {
 		let account, password, baseURL;
 		const previousCredentials = await api.getCredentials();
-		console.log(previousCredentials);
 		const url = await vscode.window.showInputBox({
 			placeHolder: 'https://biz.demo15.zentao.net/',
 			value: previousCredentials.url || 'https://biz.demo15.zentao.net/',
