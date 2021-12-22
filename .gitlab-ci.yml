@@ -8,7 +8,7 @@ build_vsix:
     stage: build
     script:
         - npm install
-        - npx vsce package
+        - npm run build
     artifacts:
         paths:
             - zentao-*.vsix
