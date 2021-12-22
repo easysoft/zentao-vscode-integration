@@ -38,14 +38,13 @@ class zentaoAPI {
             if (url) {
                 this._baseURL = url;
             }
+            const config = await this.getConfig();
+            if (config) {
+                this._zentaoConfig = config;
+            }
             this.getCurrentUser().then(profile => {
                 if (profile) {
                     this._user = profile;
-                }
-            });
-            this.getConfig().then(config => {
-                if (config) {
-                    this._zentaoConfig = config;
                 }
             });
             return this;
