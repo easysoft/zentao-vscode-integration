@@ -150,6 +150,7 @@ const activate = async (context) => {
 		items = formatZentaoObjectsForPicker(items, api.user, {
 			assignedToMe: typePick.type !== 'story',
 			prefix: typePick.label,
+			type: typePick.type,
 		});
 		if (!items || !items.length) {
 			return vscode.window.showWarningMessage('没有可选项');
@@ -205,6 +206,7 @@ const activate = async (context) => {
 		}
 		items = formatZentaoObjectsForPicker(items, null, {
 			prefix: typePick.label,
+			type: typePick.type,
 		});
 		if (!items || !items.length) {
 			return vscode.window.showWarningMessage('没有可选项');
@@ -261,6 +263,7 @@ const activate = async (context) => {
 			}
 			items = formatZentaoObjectsForPicker(items, null, {
 				prefix: matchType.prefix,
+				type: matchType.type,
 			});
 			if (!items || !items.length) {
 				return;

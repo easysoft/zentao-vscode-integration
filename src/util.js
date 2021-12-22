@@ -76,6 +76,7 @@ const openCommitMsgFile = async () => {
  * @param {object} options 可选参数
  * @param {boolean} [options.assignedToMe] 只保留指派给当前用户的对象
  * @param {string} [options.prefix] 每项的前缀
+ * @param {string} [options.type] 数据类型 ('story' | 'task' | 'bug')
  * @returns {{id: number, label: string}[]} 适用于选择操作的对象数组
  */
 const formatZentaoObjectsForPicker = (objects, user = null, options = {}) => {
@@ -84,6 +85,32 @@ const formatZentaoObjectsForPicker = (objects, user = null, options = {}) => {
     }
     if (options.assignedToMe && user) {
         objects = objects.filter(o => o.assignedTo && (typeof o.assignedTo === 'object' ? o.assignedTo.id === user.id : o.assignedTo === user.account));
+    }
+
+    const objectType = options.type;
+    const workspaceConfig = vscode.workspace.getConfiguration();
+    switch (objectType) {
+        case 'bug':
+            const filterBugs = workspaceConfig.get('zentao.filter.filterBugs');
+            console.log(filterBugs);
+            if (filterBugs) {
+                objects = objects.filter(o => o.status && ((typeof o.status === 'object' && o.status.code === 'active') || o.status === 'active'));
+            }
+            break;
+        case 'task':
+            const filterTasks = workspaceConfig.get('zentao.filter.filterTasks');
+            if (filterTasks) {
+                const statuses = ['wait', 'doing'];
+                objects = objects.filter(o => o.status && statuses.includes(o.status));
+            }
+            break;
+        case 'story':
+            const filterStories = workspaceConfig.get('zentao.filter.filterStories');
+            if (filterStories) {
+                const statuses = ['active', 'changed'];
+                objects = objects.filter(o => o.status && statuses.includes(o.status));
+            }
+            break;
     }
 
     return objects.map(o => ({

@@ -68,6 +68,28 @@
 				"title": "撰写 Commit Message (自动补全)",
 				"category": "禅道 (Zentao)"
 			}
+		],
+		"configuration":[
+			{
+				"title": "Zentao",
+				"properties": {
+					"zentao.filter.filterBugs": {
+						"type": "boolean",
+						"description": "不展示已解决、已关闭的 Bug",
+						"default": true
+					},
+					"zentao.filter.filterTasks": {
+						"type": "boolean",
+						"description": "不展示已取消、已完成、已关闭的任务",
+						"default": true
+					},
+					"zentao.filter.filterStories": {
+						"type": "boolean",
+						"description": "不展示已关闭、未通过评审的需求",
+						"default": true
+					}
+				}
+			}
 		]
 	},
 	"scripts": {
