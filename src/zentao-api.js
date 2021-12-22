@@ -98,6 +98,10 @@ class zentaoAPI {
             }
             return response;
         } catch (error) {
+            if (error && error.response && error.response.status == 403) {
+                vscode.window.showWarningMessage('当前用户无权限获取相关数据，请联系管理员');
+                return;
+            }
             console.log(`GET from ${url} with token ${this._token} error: `, error);
             vscode.window.showErrorMessage('请求后端出错，请尝试重新登录，并检查用户权限');
             return;
@@ -137,6 +141,15 @@ class zentaoAPI {
             }
             return response;
         } catch (error) {
+            if (error && error.response) {
+                if (error.response.status == 403) {
+                    vscode.window.showWarningMessage('当前用户无权限获取相关数据，请联系管理员');
+                    return;
+                } else if (error.response.status == 401) {
+                    vscode.window.showErrorMessage('用户名、密码不正确，请重新登录');
+                    return;
+                }
+            }
             console.log(`POST to ${url} with token ${this._token} error: `, error);
             vscode.window.showErrorMessage('请求后端出错，请尝试重新登录，并检查用户权限');
             return;
