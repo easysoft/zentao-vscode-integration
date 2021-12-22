@@ -200,7 +200,7 @@ const activate = async (context) => {
 					items = await api.getProjectStories(currentProject.id);
 				} else if (typePick.parentType === 'execution') {
 					if (!currentExecution) {
-						return vscode.window.showWarningMessage('请先选择项目再选择需求');
+						return vscode.window.showWarningMessage('请先选择执行再选择需求');
 					}
 					items = await api.getExecutionStories(currentExecution.id);
 				} else {
