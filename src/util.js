@@ -97,7 +97,8 @@ const formatZentaoObjectsForPicker = (objects, user = null, options = {}) => {
         case 'bug':
             const filterBugs = workspaceConfig.get('zentao.filter.filterBugs');
             if (filterBugs) {
-                objects = objects.filter(o => o.status && ((typeof o.status === 'object' && o.status.code === 'active') || o.status === 'active'));
+                const statuses = ['active', 'confirmed'];
+                objects = objects.filter(o => o.status && ((typeof o.status === 'object' && statuses.includes(o.status.code)) || statuses.includes(o.status)));
             }
             break;
         case 'task':
