@@ -271,6 +271,16 @@ class zentaoAPI {
     }
 
     /**
+     * 获取项目的需求列表
+     * @param {number} project
+     * @returns {object[]} 需求列表
+     */
+    async getProjectStories(project) {
+        const response = await this.getAll(`projects/${project}/stories`);
+        return response && response.data && response.data.stories;
+    }
+
+    /**
      * 获取执行的任务列表
      * @param {number} execution 执行 ID
      * @returns {object[]} 任务列表
@@ -278,6 +288,16 @@ class zentaoAPI {
     async getExecutionTasks(execution) {
         const response = await this.getAll(`executions/${execution}/tasks`);
         return response && response.data && response.data.tasks;
+    }
+
+    /**
+     * 获取执行的需求列表
+     * @param {number} execution 执行 ID
+     * @returns {object[]} 需求列表
+     */
+    async getExecutionStories(execution) {
+        const response = await this.getAll(`executions/${execution}/stories`);
+        return response && response.data && response.data.stories;
     }
 
     /**

@@ -175,14 +175,17 @@ const activate = async (context) => {
 	// 选择并在浏览器中打开任务
 	context.subscriptions.push(vscode.commands.registerCommand('zentao.viewObject', async () => {
 		const typePick = await vscode.window.showQuickPick([
-			{type: 'story', label: '需求'},
-			{type: 'task', label: '任务'},
-			{type: 'bug', label: 'Bug'},
+			{type: 'story', parentType: 'product', label: '产品的所有需求 (product story)', prefix: '需求'},
+			{type: 'story', parentType: 'project', label: '项目的需求 (project story)', prefix: '需求'},
+			{type: 'story', parentType: 'execution', label: '执行的需求 (execution story)', prefix: '需求'},
+			{type: 'task', parentType: 'execution', label: '执行的任务 (execution task)', prefix: '任务'},
+			{type: 'bug', parentType: 'product', label: '产品的 Bug (product bug)', prefix: 'Bug'},
 		]);
 		if (!typePick) {
 			return;
 		}
 		const currentProduct = context.workspaceState.get('zentaoProduct');
+		const currentProject = context.workspaceState.get('zentaoProject');
 		const currentExecution = context.workspaceState.get('zentaoExecution');
 		let items;
 		switch (typePick.type) {
@@ -190,7 +193,19 @@ const activate = async (context) => {
 				if (!currentProduct) {
 					return vscode.window.showWarningMessage('请先选择产品再选择需求');
 				}
-				items = await api.getProductStories(currentProduct.id);
+				if (typePick.parentType === 'project') {
+					if (!currentProject) {
+						return vscode.window.showWarningMessage('请先选择项目再选择需求');
+					}
+					items = await api.getProjectStories(currentProject.id);
+				} else if (typePick.parentType === 'execution') {
+					if (!currentExecution) {
+						return vscode.window.showWarningMessage('请先选择项目再选择需求');
+					}
+					items = await api.getExecutionStories(currentExecution.id);
+				} else {
+					items = await api.getProductStories(currentProduct.id);
+				}
 				break;
 			case 'bug':
 				if (!currentProduct) {
@@ -203,9 +218,10 @@ const activate = async (context) => {
 					return vscode.window.showWarningMessage('请先选择执行再选择任务');
 				}
 				items = await api.getExecutionTasks(currentExecution.id);
+				break;
 		}
 		items = formatZentaoObjectsForPicker(items, null, {
-			prefix: typePick.label,
+			prefix: typePick.prefix,
 			type: typePick.type,
 		});
 		if (!items || !items.length) {
