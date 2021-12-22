@@ -1,0 +1,15 @@
+image: node:latest
+
+cache:
+  paths:
+    - node_modules/
+
+build_vsix:
+    stage: build
+    script:
+        - npm install
+        - npx vsce package
+    artifacts:
+        paths:
+            - zentao-*.vsix
+        expire_in: 3 day
