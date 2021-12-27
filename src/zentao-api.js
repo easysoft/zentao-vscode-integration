@@ -38,15 +38,19 @@ class zentaoAPI {
             if (url) {
                 this._baseURL = url;
             }
-            const config = await this.getConfig();
-            if (config) {
-                this._zentaoConfig = config;
-            }
-            this.getCurrentUser().then(profile => {
-                if (profile) {
-                    this._user = profile;
+            try {
+                const config = await this.getConfig();
+                if (config) {
+                    this._zentaoConfig = config;
                 }
-            });
+                this.getCurrentUser().then(profile => {
+                    if (profile) {
+                        this._user = profile;
+                    }
+                });
+            } catch (e) {
+                console.log('Zentao API init error:', e);
+            }
             return this;
         })();
     }
