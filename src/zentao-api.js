@@ -28,6 +28,18 @@ class zentaoAPI {
          */
         this._user = null;
 
+        /**
+         * 禅道配置对象
+         * @type {object}
+         */
+        this._zentaoConfig = null;
+
+        /**
+         * 禅道 Commit 匹配规则配置对象
+         * @type {object}
+         */
+        this._zentaoReposRules = null;
+
         // 初始化时获取上次保存的凭据，并设置用户
         return (async () => {
             const token = await context.secrets.get('token');
@@ -47,6 +59,14 @@ class zentaoAPI {
                     if (profile) {
                         this._user = profile;
                     }
+                });
+                this.getReposRules().then(rules => {
+                    if (rules) {
+                        this._zentaoReposRules = rules;
+                        console.log(rules);
+                    }
+                }).catch(e => {
+                    console.log('Cannot get Zentao repos rules:', e);
                 });
             } catch (e) {
                 console.log('Zentao API init error:', e);
@@ -242,6 +262,11 @@ class zentaoAPI {
                 this._zentaoConfig = config;
             }
         });
+        this.getReposRules().then(rules => {
+            if (rules) {
+                this._zentaoReposRules = rules;
+            }
+        });
         this._user = await this.getCurrentUser();
         return this._user;
     }
@@ -351,6 +376,15 @@ class zentaoAPI {
     async getRepos() {
         const response = await this.get('repos');
         return response && response.data && response.data.repos;
+    }
+
+    /**
+     * 获取版本库规则列表
+     * @returns {object} 版本库规则
+     */
+    async getReposRules() {
+        const response = await this.get('repos/rules');
+        return response && response.data;
     }
 }
 
