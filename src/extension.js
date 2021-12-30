@@ -255,6 +255,13 @@ const activate = async (context) => {
 	// 打开用于撰写 Commit Message 的文件
 	context.subscriptions.push(vscode.commands.registerCommand('zentao.writeCommitMessage', openCommitMsgFile));
 
+	// 处理保存 Commit Message 文件
+	context.subscriptions.push(vscode.workspace.onDidSaveTextDocument(e => {
+		if (e.languageId === 'git-commit') {
+			commitWithMessage(e.getText().trim());
+		}
+	}));
+
 	// Git Commit Message 任务 ID 自动补全
 	vscode.languages.registerCompletionItemProvider('git-commit', {
 		provideCompletionItems: async (document, position) => {
