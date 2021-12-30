@@ -268,7 +268,7 @@ const activate = async (context) => {
 			const linePrefix = document.lineAt(position).text.substr(0, position.character);
 			let matchType = null;
 			if (![{type: 'task', keyword: taskKeyword, prefix: '任务'}, {type: 'bug', keyword: bugKeyword, prefix: 'Bug'}, {type: 'story', keyword: storyKeyword, prefix: '需求'}].some(type => {
-				if (new RegExp(`${type.keyword} (${idPrefix}\\d+${idSplitter})*${idPrefix}$`, 'i').test(linePrefix)) {
+				if (new RegExp(`${type.keyword} ${idPrefix}(\\d+${idSplitter})*(${idPrefix}|${idSplitter})?$`, 'i').test(linePrefix)) {
 					matchType = type;
 					return true;
 				}
@@ -317,7 +317,7 @@ const activate = async (context) => {
 				return completionItem;
 			});
 		},
-	}, api.reposRules ? api.reposRules.id.mark : '#');
+	}, api.reposRules ? api.reposRules.id.mark : '#', api.reposRules ? api.reposRules.id.split : ',');
 };
 
 module.exports = {
