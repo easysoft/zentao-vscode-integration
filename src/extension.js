@@ -249,7 +249,10 @@ const activate = async (context) => {
 			return;
 		}
 
-		vscode.env.openExternal(`${api.baseURL}${typePick.type}-view-${objectPick.id}.html?zentaosid=${api.token}`);
+		const isPathInfoMode = api.config && api.config.requestType === 'PATH_INFO';
+		const url = isPathInfoMode ? `${api.baseURL}${typePick.type}-view-${objectPick.id}.html?zentaosid=${api.token}` : `${api.baseURL}index.php?m=${typePick.type}&f=view&${typePick.type}ID=${objectPick.id}&zentaosid=${api.token}`;
+
+		vscode.env.openExternal(url);
 	}));
 
 	// 打开用于撰写 Commit Message 的文件
