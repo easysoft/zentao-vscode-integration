@@ -214,6 +214,13 @@ class zentaoAPI {
     }
 
     /**
+     * @returns {object} 存储的 Commit 匹配规则
+     */
+    get reposRules() {
+        return this._zentaoReposRules;
+    }
+
+    /**
      * 获取禅道服务模式
      * @returns {object} 禅道服务模式
      */
