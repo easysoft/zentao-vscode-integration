@@ -63,7 +63,6 @@ class zentaoAPI {
                 this.getReposRules().then(rules => {
                     if (rules) {
                         this._zentaoReposRules = rules;
-                        console.log(rules);
                     }
                 }).catch(e => {
                     console.log('Cannot get Zentao repos rules:', e);
