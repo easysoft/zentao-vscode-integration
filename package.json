@@ -3,7 +3,7 @@
 	"displayName": "禅道",
 	"description": "Zentao integration.",
 	"publisher": "zentao",
-	"version": "0.2.6",
+	"version": "0.3.0",
 	"icon": "images/logo.png",
 	"repository": {
 		"type": "git",
