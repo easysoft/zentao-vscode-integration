@@ -258,10 +258,17 @@ const activate = async (context) => {
 	// Git Commit Message 任务 ID 自动补全
 	vscode.languages.registerCompletionItemProvider('git-commit', {
 		provideCompletionItems: async (document, position) => {
+			const rules = api.reposRules;
+			const taskKeyword = rules ? rules.module.task : 'task';
+			const bugKeyword = rules ? rules.module.bug : 'bug';
+			const storyKeyword = rules ? rules.module.story : 'story';
+			const idPrefix = rules ? rules.id.mark : '#';
+			const idSplitter = rules ? rules.id.split : ',';
+
 			const linePrefix = document.lineAt(position).text.substr(0, position.character);
 			let matchType = null;
-			if (![{type: 'task', prefix: '任务'}, {type: 'bug', prefix: 'Bug'}, {type: 'story', prefix: '需求'}].some(type => {
-				if (linePrefix.toLowerCase().endsWith(`${type.type} #`)) {
+			if (![{type: 'task', keyword: taskKeyword, prefix: '任务'}, {type: 'bug', keyword: bugKeyword, prefix: 'Bug'}, {type: 'story', keyword: storyKeyword, prefix: '需求'}].some(type => {
+				if (new RegExp(`${type.keyword} (${idPrefix}\\d+${idSplitter})*${idPrefix}$`, 'i').test(linePrefix)) {
 					matchType = type;
 					return true;
 				}
@@ -310,7 +317,7 @@ const activate = async (context) => {
 				return completionItem;
 			});
 		},
-	}, '#');
+	}, api.reposRules ? api.reposRules.id.mark : '#');
 };
 
 module.exports = {
