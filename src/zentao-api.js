@@ -156,7 +156,7 @@ class zentaoAPI {
         if (!firstResponse) {
             return;
         }
-        if (!firstResponse.page || firstResponse.data.limit >= firstResponse.data.total) {
+        if (!firstResponse.data.page || firstResponse.data.limit >= firstResponse.data.total) {
             return firstResponse;
         }
         return await this.get(`${path}?limit=${firstResponse.data.total}`);
