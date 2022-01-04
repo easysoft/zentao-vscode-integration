@@ -55,18 +55,20 @@ class zentaoAPI {
                 if (config) {
                     this._zentaoConfig = config;
                 }
-                this.getCurrentUser().then(profile => {
-                    if (profile) {
-                        this._user = profile;
-                    }
-                });
-                this.getReposRules().then(rules => {
-                    if (rules) {
-                        this._zentaoReposRules = rules;
-                    }
-                }).catch(e => {
-                    console.log('Cannot get Zentao repos rules:', e);
-                });
+                if (token) {
+                    this.getCurrentUser().then(profile => {
+                        if (profile) {
+                            this._user = profile;
+                        }
+                    });
+                    this.getReposRules().then(rules => {
+                        if (rules) {
+                            this._zentaoReposRules = rules;
+                        }
+                    }).catch(e => {
+                        console.log('Cannot get Zentao repos rules:', e);
+                    });
+                }
             } catch (e) {
                 console.log('Zentao API init error:', e);
             }
@@ -113,13 +115,20 @@ class zentaoAPI {
      * @param {string} path 路径
      * @param {object} options 其他参数
      * @param {boolean} [options.customPath] 自定义请求路径，非 api.php 请求，会直接拼 path 到 baseURL 上
+     * @param {number} [options.timeout] 请求超时时间，以毫秒为单位
+     * @param {number} [options.withoutToken] 是否不在 header 中加入 token
      * @returns {Promise<import('axios').AxiosResponse>}
      */
     async get(path, options = {}) {
         const url = `${this._baseURL}${options.customPath ? '' : 'api.php/v1/'}${path}`;
         try {
             const response = await axios.get(url, {
-                headers: {'Content-Type': 'application/json', Token: this._token}
+                ...{
+                    headers: options.withoutToken ? {'Content-Type': 'application/json'} : {'Content-Type': 'application/json', Token: this._token},
+                },
+                ...(options.timeout ? {
+                    timeout: options.timeout
+                } : {}),
             });
             if (!response || typeof response.data !== 'object') {
                 console.log(response);
@@ -225,7 +234,7 @@ class zentaoAPI {
      * @returns {object} 禅道服务模式
      */
     async getConfig() {
-        const response = await this.get('index.php?mode=getconfig', {customPath: true});
+        const response = await this.get('index.php?mode=getconfig', {customPath: true, timeout: 1000, withoutToken: true});
         return response.data;
     }
 
