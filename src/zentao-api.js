@@ -365,6 +365,15 @@ class zentaoAPI {
     }
 
     /**
+     * 获取执行列表
+     * @returns {object[]} 执行列表
+     */
+    async getExecutions() {
+        const response = await this.getAll(`executions`);
+        return response && response.data && response.data.executions;
+    }
+
+    /**
      * 获取执行的任务列表
      * @param {number} execution 执行 ID
      * @returns {object[]} 任务列表

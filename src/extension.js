@@ -74,7 +74,7 @@ const activate = async (context) => {
 	// 选择当前工作区对应的项目
 	context.subscriptions.push(vscode.commands.registerCommand('zentao.selectProject', async () => {
 		const {systemMode} = api.config;
-		const projects = systemMode === 'new' ? await api.getProjects() : await api.getProjectExecutions(1);
+		const projects = systemMode === 'new' ? await api.getProjects() : await api.getExecutions();
 		if (!projects || !projects.length) {
 			return vscode.window.showWarningMessage('没有可选项');
 		}
