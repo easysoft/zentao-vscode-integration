@@ -77,6 +77,7 @@ const openCommitMsgFile = async () => {
  * @param {boolean} [options.assignedToMe] 只保留指派给当前用户的对象
  * @param {string} [options.prefix] 每项的前缀
  * @param {string} [options.type] 数据类型 ('story' | 'task' | 'bug')
+ * @param {number[]} [options.exclude] 要过滤掉的 ID 数组
  * @returns {{id: number, label: string}[]} 适用于选择操作的对象数组
  */
 const formatZentaoObjectsForPicker = (objects, user = null, options = {}) => {
@@ -115,6 +116,10 @@ const formatZentaoObjectsForPicker = (objects, user = null, options = {}) => {
                 objects = objects.filter(o => o.status && statuses.includes(o.status));
             }
             break;
+    }
+
+    if (options.exclude) {
+        objects = objects.filter(o => !options.exclude.includes(o.id));
     }
 
     return objects.map(o => ({

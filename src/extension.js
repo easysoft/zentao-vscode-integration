@@ -277,11 +277,15 @@ const activate = async (context) => {
 
 			const linePrefix = document.lineAt(position).text.substr(0, position.character);
 			let matchType = null;
+			let existingIDs = [];
 			if (![{type: 'task', keyword: taskKeyword, prefix: '任务'}, {type: 'bug', keyword: bugKeyword, prefix: 'Bug'}, {type: 'story', keyword: storyKeyword, prefix: '需求'}].some(type => {
-				if (new RegExp(`${type.keyword} ${idPrefix}(\\d+${idSplitter})*(${idPrefix}|${idSplitter})?$`, 'i').test(linePrefix)) {
-					matchType = type;
-					return true;
+				const matches = new RegExp(`${type.keyword} ${idPrefix}((\\d+${idSplitter})*)(${idPrefix}|${idSplitter})?$`, 'im').exec(linePrefix);
+				if (!matches) {
+					return false;
 				}
+				existingIDs = matches[1].split(idSplitter).filter(Boolean).map(id => +id);
+				matchType = type;
+				return true;
 			})) {
 				return;
 			}
@@ -313,6 +317,7 @@ const activate = async (context) => {
 			items = formatZentaoObjectsForPicker(items, null, {
 				prefix: matchType.prefix,
 				type: matchType.type,
+				exclude: existingIDs,
 			});
 			if (!items || !items.length) {
 				return;
