@@ -46,9 +46,16 @@ const activate = async (context) => {
 		vscode.window.showInformationMessage(`将使用 ${account}:${'*'.repeat(password.length)} 登录 ${url}`);
 		api.login({url: baseURL, account, password}).then(profile => {
 			vscode.window.showInformationMessage(`登录成功，当前用户 ${profile.realname}`);
+			const workspaceConfig = vscode.workspace.getConfiguration();
+			if (workspaceConfig.get('zentao.login.clearState')) {
+				context.workspaceState.update('zentaoProduct', null);
+				context.workspaceState.update('zentaoProject', null);
+				context.workspaceState.update('zentaoExecution', null);
+				vscode.window.showInformationMessage('已选产品、项目等已被重置。');
+			}
 		}).catch(e => {
 			console.log(e);
-			vscode.window.showWarningMessage(`登录失败，请检查服务器地址、用户名、密码是否填写正确。`);
+			vscode.window.showWarningMessage('登录失败，请检查服务器地址、用户名、密码是否填写正确。');
 		});
 	}));
 

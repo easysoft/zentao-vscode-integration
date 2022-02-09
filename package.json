@@ -3,7 +3,7 @@
 	"displayName": "禅道",
 	"description": "Zentao integration.",
 	"publisher": "zentao",
-	"version": "0.3.3",
+	"version": "0.3.4",
 	"icon": "images/logo.png",
 	"repository": {
 		"type": "git",
@@ -73,6 +73,11 @@
 			{
 				"title": "Zentao",
 				"properties": {
+					"zentao.login.clearState": {
+						"type": "boolean",
+						"description": "登录后重置之前选择的产品、项目等",
+						"default": true
+					},
 					"zentao.filter.filterBugs": {
 						"type": "boolean",
 						"description": "不展示已解决、已关闭的 Bug",
