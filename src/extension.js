@@ -307,18 +307,28 @@ const activate = async (context) => {
 					items = await api.getExecutionTasks(currentExecution.id);
 					break;
 				case 'bug':
-					currentProduct = context.workspaceState.get('zentaoProduct');
-					if (!currentProduct) {
-						return;
+					currentExecution = context.workspaceState.get('zentaoExecution');
+					if (!currentExecution) {
+						currentProduct = context.workspaceState.get('zentaoProduct');
+						if (!currentProduct) {
+							return;
+						}
+						items = await api.getProductBugs(currentProduct.id);
+					} else {
+						items = await api.getExecutionBugs(currentExecution.id);
 					}
-					items = await api.getProductBugs(currentProduct.id);
 					break;
 				case 'story':
-					currentProduct = context.workspaceState.get('zentaoProduct');
-					if (!currentProduct) {
-						return;
+					currentExecution = context.workspaceState.get('zentaoExecution');
+					if (!currentExecution) {
+						currentProduct = context.workspaceState.get('zentaoProduct');
+						if (!currentProduct) {
+							return;
+						}
+						items = await api.getProductStories(currentProduct.id);
+					} else {
+						items = await api.getExecutionStories(currentExecution.id);
 					}
-					items = await api.getProductStories(currentProduct.id);
 					break;
 			}
 			items = formatZentaoObjectsForPicker(items, null, {

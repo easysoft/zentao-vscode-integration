@@ -394,6 +394,16 @@ class zentaoAPI {
     }
 
     /**
+     * 获取执行的 bug 列表
+     * @param {number} execution 执行 ID
+     * @returns {object[]} bug 列表
+     */
+    async getExecutionBugs(execution) {
+        const response = await this.getAll(`executions/${execution}/bugs`);
+        return response && response.data && response.data.bugs;
+    }
+
+    /**
      * 获取版本库列表
      * @returns {object[]} 版本库列表
      */
