@@ -7,7 +7,7 @@
 	"icon": "images/logo.png",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/easysoft/vscode-zentao"
+		"url": "https://github.com/easysoft/zentao-vscode-integration"
 	},
 	"license": "MIT",
 	"preview": true,
